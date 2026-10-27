@@ -1,0 +1,27 @@
+<div class="detail-page">
+  <app-header />
+
+  <main>
+    @if (isLoading()) {
+      <div class="detail-state">Cargando el perfume...</div>
+    } @else if (hasError() || !product()) {
+      <div class="detail-state">No se encontró el perfume solicitado. <a routerLink="/catalogo">Volver al catálogo</a></div>
+    } @else {
+      <section class="detail-breadcrumb section-container"><a routerLink="/catalogo">← Volver al catálogo</a><span>Inicio / Catálogo / {{ product()?.marca || 'Laure Privé' }} / {{ product()?.nombre }}</span></section>
+      <section class="detail-main section-container">
+        <div class="gallery">
+          <div class="gallery-main"><span>EDICIÓN LIMITADA</span><img [src]="selectedImage" [alt]="product()?.nombre" /></div>
+          <div class="gallery-caption">✦ {{ product()?.marca || 'Laure Privé' }} · EXTRACTO DE PARFUM · LAURE PERFUMERÍA</div>
+          <div class="gallery-thumbs">@for (image of productImages; track $index) {<button type="button" [class.selected]="selectedImageIndex() === $index" (click)="selectImage($index)"><img [src]="image" alt="" /></button>}</div>
+        </div>
+        <div class="product-summary"><span class="product-kicker">{{ product()?.marca || 'LAURE PRIVÉ' }} · HAUTE PARFUMERIE</span><span class="reference">REF. LP-{{ product()?.idProducto }}</span><h1>{{ product()?.nombre }}</h1><div class="rating">★★★★★ <strong>5.0</strong> <span>· 48 reseñas de clientes verificadas</span></div><div class="detail-price">{{ formatPrice(product()?.precioVenta || 0) }} <small>EDICIÓN Nº 04</small></div><p class="summary-description">{{ product()?.descripcion || 'Una composición de alta perfumería creada para permanecer en la piel y en la memoria.' }}</p><blockquote>“Un tributo al resplandor solar de la tarde limeña y al misticismo del desierto costero. Una fragancia que abraza la fuerza de la tierra y la delicadeza de la bergamota.”</blockquote><span class="detail-label">PRESENTACIÓN &amp; FORMATO:</span><div class="format-options"><button type="button"><strong>50 ml</strong><small>Vaporisateur<br />{{ formatPrice((product()?.precioVenta || 0) * .72) }}</small></button><button type="button" class="active"><strong>100 ml</strong><small>Frasco escultor<br />{{ formatPrice(product()?.precioVenta || 0) }}</small></button><button type="button"><strong>200 ml</strong><small>Edición Grande<br />{{ formatPrice((product()?.precioVenta || 0) * 1.62) }}</small></button></div><p class="stock-line">● Stock: {{ product()?.stock }} unidades disponibles en Atelier San Isidro, Lima</p><div class="purchase-row"><button type="button" (click)="decrement()">−</button><span>{{ quantity }}</span><button type="button" (click)="increment()">+</button><button class="add-button" type="button" (click)="addToCart()"><img src="/assets/icons/Bolsa.png" alt="" /> AGREGAR AL CARRITO</button></div><button class="buy-now" type="button">COMPRAR AHORA CON 1-CLICK</button><div class="service-notes"><span>✓ Envío Asegurado Gratis <small>Envío nacional protegido y verificación con cuidado.</small></span><span>✦ 2 Viales de Obsequio <small>Muestras de cortesía seleccionadas para probar en piel antes de decidir.</small></span><span>◉ Garantía 100% Original <small>Certificado de autenticidad firmado por la casa.</small></span></div></div>
+      </section>
+    }
+
+    <section class="olfactory-section"><div class="section-container"><div class="center-heading"><span class="eyebrow">Arquitectura sensorial</span><h2>Pirámide Olfativa</h2><p>Un desarrollo cromático en tres actos, macerado durante 180 días para alcanzar la perfección aromática.</p></div><div class="notes-grid"><article><span>ACTO 1 · 0 A 30 MINUTOS</span><h3>Notas de Salida</h3><p>Destellos cítricos y especiados que iluminan la composición.</p><strong>Bergamota de Calabria<br />Azafrán Dorado</strong></article><article class="highlight"><span>ACTO 2 · 6 HORAS</span><h3>Notas de Corazón</h3><p>La personalidad envolvente de la fragancia.</p><strong>Rosa Damascena de Grasse<br />Cuero Fino Cordobés</strong></article><article><span>ACTO 3 · 16 HORAS</span><h3>Notas de Fondo</h3><p>Una estela profunda con maderas nobles y acordes pulidos.</p><strong>Ámbar Gris Marino<br />Sándalo de Mysore Añejado</strong></article></div><div class="note-facts"><span><small>CONCENTRACIÓN</small><strong>30% Extrait</strong></span><span><small>LONGEVIDAD EN PIEL</small><strong>18+ Horas</strong></span><span><small>ESTELA</small><strong>Intensa y Majestuosa</strong></span><span><small>ESTACIÓN IDEAL</small><strong>Otoño / Noche</strong></span></div></div></section>
+
+    <section class="recommendations section-container"><div class="section-heading"><div><span class="eyebrow">Descubrimientos afines</span><h2>Creaciones que Podrían Cautivarte</h2></div><a routerLink="/catalogo">Ver toda la colección →</a></div><div class="recommendation-grid">@for (item of recommendations(); track item.idProducto; let i = $index) {<app-product-card [product]="item" [index]="i" />}</div></section>
+  </main>
+
+  <app-footer />
+</div>

@@ -1,0 +1,17 @@
+<div class="confirmation-page">
+  <app-header />
+  <main class="confirmation-main section-container">
+    <div class="confirmation-icon">✥</div>
+    <span class="confirmation-eyebrow">CONFIRMACIÓN DE RESERVA DE CAVA PRIVADA</span>
+    <h1>¡Gracias por su orden, visitante Laure!</h1>
+    <p class="confirmation-intro">Hemos recibido su pedido con devoción artesanal. Nuestro maestro perfumista está preparando su cofre lacado con esencias nobles y maceradas en reposo absoluto.</p>
+    <div class="order-meta"><strong>Nº DE PEDIDO: <span>#{{ orderNumber() }}</span></strong><span>✦ Fecha: {{ today | date:'dd/MM/yyyy' }}</span><strong>● Confirmado &amp; En preparación en Cava (San Isidro)</strong></div>
+
+    <section class="confirmation-grid">
+      <div class="confirmed-items"><div class="confirmed-heading"><h2>▣ Cofre de Extrait de Parfum</h2><span>{{ displayCount() }} ÍTEMS + 1 CORTESÍA</span></div>@for (item of purchasedItems(); track item.product.idProducto) {<article class="confirmed-item"><img [src]="image(item.product.imagenUrl, item.product.imagenes)" [alt]="item.product.nombre" /><div><h3>{{ item.product.nombre }}</h3><p>{{ item.product.descripcion || 'Extrait de Parfum · Selección Laure Privé' }}</p><small>Cant: {{ item.quantity }} · Edición seleccionada</small></div><strong>{{ price(item.product.precioVenta * item.quantity) }}</strong></article>}<div class="included"><span>♧</span><div><strong>OBSEQUIO LAURE PRIVÉ</strong><h3>2 Viales de Muestra (2ml c/u)</h3><p>Oud Camboyano y ciudad de Florentino para cata previa</p></div><b>GRATIS</b></div><div class="confirmed-total"><span>Subtotal de esencias</span><strong>{{ price(displayTotal()) }}</strong><span>Empaque de Lujo Artesanal</span><b>Gratis</b><span>Envío Asegurado Express</span><b>S/ 0.00</b><hr /><h2>Total Pagado <strong>{{ price(displayTotal()) }}</strong></h2></div></div>
+      <aside class="delivery-card"><h2>▱ Información de Entrega</h2><hr /><small>DESTINATARIO &amp; DIRECCIÓN</small><h3>{{ profile()?.nombres || 'Cargando perfil...' }} {{ profile()?.apellidos || '' }}</h3><p>{{ profile()?.direccion || 'Dirección no registrada' }}</p><div class="delivery-window"><strong>VENTANA DE ENTREGA ESTIMADA</strong><b>Mañana, 25 de Octubre de 2024</b><span>Franja horaria: 10:00 - 14:00 hrs</span></div><small>CONTACTO REGISTRADO</small><p>{{ profile()?.correo || 'Correo no registrado' }}<br />{{ profile()?.telefono || 'Teléfono no registrado' }}</p>@if (invoiceError()) { <p class="invoice-error">{{ invoiceError() }}</p> }<button type="button" class="download" (click)="downloadInvoice()">⇩ DESCARGAR FACTURA ELECTRÓNICA (PDF)</button><button type="button" class="tracking">♧ SEGUIR ESTADO DEL ENVÍO</button><a routerLink="/catalogo">← VOLVER AL CATÁLOGO</a></aside>
+    </section>
+    <section class="trust-grid"><article><span>♧</span><h2>Concierge Personalizado</h2><p>Seguimiento en tiempo real y asistencia directa de su asesor olfativo vía WhatsApp privado.</p></article><article><span>♢</span><h2>Garantía Olfativa Laure</h2><p>Pruebe los 2 viales de cortesía en piel antes de romper el sello de cera del frasco principal.</p></article><article><span>♧</span><h2>Cata Sensorial en Atelier</h2><p>Una invitación de cortesía para degustación privada en nuestro Atelier de San Isidro.</p></article></section>
+  </main>
+  <app-footer />
+</div>

@@ -1,0 +1,27 @@
+<header class="site-header">
+  <a class="brand" routerLink="/" aria-label="Laure Perfumería inicio">
+    <img class="brand-logo" src="/assets/images/logo.png" alt="Laure Perfumería" />
+    <span class="brand-name">LAURE PERFUMERÍA <small>ESENCIA &amp; DISTINCIÓN</small></span>
+  </a>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+    <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
+    <a href="/nosotros" routerLink="/nosotros" routerLinkActive="active">Sobre nosotros</a>
+  </nav>
+  @if (isClient()) {
+    <div class="profile-menu-wrapper">
+      <button class="account-link profile-link" type="button" (click)="toggleProfileMenu()" [attr.aria-expanded]="profileMenuOpen()" aria-label="Abrir menú de usuario" title="Menú de usuario">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2" /><path d="M5.5 20c.7-3.6 3-5.5 6.5-5.5s5.8 1.9 6.5 5.5" /></svg>
+      </button>
+      @if (profileMenuOpen()) {
+        <div class="profile-dropdown">
+          <a routerLink="/perfil" (click)="profileMenuOpen.set(false)">Perfil</a>
+          <a routerLink="/historial" (click)="profileMenuOpen.set(false)">Historial de compras</a>
+          <button type="button" (click)="logout()">Cerrar sesión</button>
+        </div>
+      }
+    </div>
+  } @else {
+    <a class="account-link" routerLink="/login">Iniciar sesión</a>
+  }
+</header>

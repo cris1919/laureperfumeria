@@ -1,0 +1,44 @@
+<div class="login-page">
+  <app-header />
+
+  <main class="login-main section-container">
+    <section class="login-grid">
+      <aside class="membership-panel">
+        <span class="membership-badge">✦ CÍRCULO LAURE PRIVÉ</span>
+        <img src="/assets/images/InicioSesion%20iamgen1.png" alt="Colección Laure Perfumería" />
+        <blockquote>“El perfume es la huella invisible de su presencia más íntima.”<small>— ATELIER LAURE, LIMA</small></blockquote>
+        <div class="membership-divider"></div>
+        <h2>Privilegios de su membresía</h2>
+        <ul>
+          <li><span>♜</span><p>Invitación personal a catas sensoriales privadas en nuestro Atelier de San Isidro.</p></li>
+          <li><span>✧</span><p>Acceso anticipado y preventas exclusivas de <strong>frascos numerados y ediciones limitadas.</strong></p></li>
+          <li><span>⌁</span><p>Muestras de cortesía de extractos puros nicho seleccionadas a mano en cada pedido.</p></li>
+        </ul>
+        <div class="membership-footer"><span>◉ Autenticidad 100% Garantizada</span><span>Lima • París</span></div>
+      </aside>
+
+      <section class="login-card">
+        <div class="login-tabs"><span class="active">Iniciar sesión</span><a class="register-link" routerLink="/registro">¿Aún no es miembro? Crear cuenta</a></div>
+        <h1>Bienvenido a Laure</h1>
+        <p class="login-intro">Acceda a su cuenta para gestionar sus pedidos, fragancias reservadas y beneficios exclusivos de alta perfumería.</p>
+
+        <form (ngSubmit)="submit()" #loginForm="ngForm">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" name="correo" type="email" [(ngModel)]="correo" required email placeholder="ej. arístide@laureperfumeria.com" />
+          <div class="password-label"><label for="password">Contraseña</label><a href="#password">¿Olvidó su contraseña?</a></div>
+          <input id="password" name="password" type="password" [(ngModel)]="password" required placeholder="••••••••••" />
+          <div class="login-options"><label class="remember"><input type="checkbox" name="remember" [(ngModel)]="remember" /> <span>Recordar mi sesión en este dispositivo</span></label><span>♧ Conexión cifrada SSL</span></div>
+          @if (errorMessage()) { <p class="form-message error">{{ errorMessage() }}</p> }
+          @if (successMessage()) { <p class="form-message success">{{ successMessage() }}</p> }
+          <button class="submit-button" type="submit" [disabled]="loginForm.invalid || isSubmitting()">{{ isSubmitting() ? 'VALIDANDO...' : 'ACCEDER A MI CUENTA →' }}</button>
+        </form>
+
+        <div class="login-assistance"><span>◉ ATENCIÓN CONCIERGE</span><p>Sus datos están protegidos bajo estricto secreto de correspondencia y protocolo SSL 256-bit.</p></div>
+      </section>
+    </section>
+
+    <section class="diagnostic-banner"><span>◎</span><div><h2>¿Primera vez en Laure Perfumería?</h2><p>Descubra nuestro cuestionario sensorial y halle su firma olfativa personalizada en menos de tres minutos.</p></div><a routerLink="/catalogo">INICIAR DIAGNÓSTICO OLFATIVO</a></section>
+  </main>
+
+  <app-footer />
+</div>

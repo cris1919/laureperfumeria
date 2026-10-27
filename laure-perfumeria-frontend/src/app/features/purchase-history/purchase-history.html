@@ -1,0 +1,11 @@
+<app-header />
+<main class="history-page">
+  <header class="history-heading"><span class="eyebrow">Laure Perfumería · Mi cuenta</span><h1>Historial de compras</h1><p>Consulta el estado y el detalle de cada pedido realizado en Laure.</p></header>
+  @if (loading()) { <section class="state">Cargando tu historial...</section> } @else if (error()) { <p class="message">{{ error() }}</p> } @else {
+    <section class="history-summary"><article><small>Pedidos realizados</small><strong>{{ purchases().length }}</strong><span>compras registradas</span></article><article><small>Último pedido</small><strong>{{ purchases().length ? (purchases()[0].fechaPedido | date:'dd MMM') : '—' }}</strong><span>fecha de compra</span></article><article><small>Total acumulado</small><strong>{{ totalSpent() | currency:'PEN':'symbol':'1.2-2' }}</strong><span>en pedidos Laure</span></article></section>
+    <section class="history-card"><div class="section-heading"><div><span class="eyebrow">Seguimiento de órdenes</span><h2>Tus pedidos</h2></div><a routerLink="/catalogo">Seguir comprando →</a></div>
+      @if (purchases().length) { @for (order of purchases(); track order.idPedido) { <article class="purchase"><div class="purchase-main"><div><strong>{{ orderLabel(order) }}</strong><small>{{ order.fechaPedido | date:'dd MMMM yyyy, HH:mm' }}</small></div><span [class]="'status ' + order.estadoPedido.toLowerCase()">{{ statusLabel(order.estadoPedido) }}</span><b>{{ order.total | currency:'PEN':'symbol':'1.2-2' }}</b><button type="button" (click)="toggle(order.idPedido)">{{ expanded() === order.idPedido ? 'Ocultar' : 'Ver detalle' }}</button></div>@if (expanded() === order.idPedido) { <div class="purchase-detail"><div><span>Subtotal</span><b>{{ order.subtotal | currency:'PEN':'symbol':'1.2-2' }}</b></div><div><span>Envío</span><b>{{ order.costoEnvio | currency:'PEN':'symbol':'1.2-2' }}</b></div><h3>Productos</h3>@for (item of order.detalles; track item.idDetalle) { <div class="product-line"><span>{{ item.cantidad }}× {{ item.nombreProducto }}</span><b>{{ item.subtotal | currency:'PEN':'symbol':'1.2-2' }}</b></div> }</div> }</article> } } @else { <div class="empty">Todavía no tienes compras registradas.</div> }
+    </section>
+  }
+</main>
+<app-footer />

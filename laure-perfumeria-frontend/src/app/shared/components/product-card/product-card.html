@@ -1,0 +1,4 @@
+<article class="catalog-card">
+  <div class="catalog-image"><span class="availability" [class.low-stock]="product().stock > 0 && product().stock < 5">{{ product().stock > 0 ? 'DISPONIBLE' : 'AGOTADO' }}</span><img [src]="image()" [alt]="product().nombre" /></div>
+  <div class="catalog-card-info"><small>{{ product().marca || 'Laure Privé' }}</small><h2>{{ product().nombre }}</h2><p>{{ product().descripcion || 'Una fragancia seleccionada por Laure para una presencia inolvidable.' }}</p><div class="price-line"><strong>{{ price() }}</strong><span [class.stock-good]="product().stock > 0">Stock: {{ product().stock }} unidades</span></div><div class="card-actions"><a [routerLink]="['/producto', product().idProducto]">VER DETALLE</a><button type="button" (click)="addToCart()" aria-label="Añadir al carrito"><img src="/assets/icons/Bolsa.png" alt="" /></button></div></div>
+</article>

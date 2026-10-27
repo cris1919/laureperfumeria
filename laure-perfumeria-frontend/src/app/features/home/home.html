@@ -1,0 +1,95 @@
+<div class="site-shell">
+  <app-header />
+
+  <main>
+    <section class="hero section-container">
+      <div class="hero-copy">
+        <span class="eyebrow">Colección primavera 2026</span>
+        <h1>El Arte Olfativo Hecho Esencia</h1>
+        <p class="hero-text">Descubre creaciones exclusivas de las casas de perfumería más prestigiosas del mundo.
+          Extractos profundos, materias nobles y acordes que definen una presencia inolvidable.</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#destacados">Explorar cada composición <span>↗</span></a>
+          <a class="button button-light" href="#familias">Descubrir categorías <span>→</span></a>
+        </div>
+        <p class="quote"><span>✦</span> “El perfume es la forma más intensa del recuerdo.” — Jean Paul Guerlain</p>
+      </div>
+      <div class="hero-image-wrap">
+        <img src="/assets/images/Imagen1.png" alt="Extracto d'Or Impérial de Laure Perfumería" />
+        <div class="hero-product-label"><small>EXTRACTO DE PERFUMERÍA</small><strong>L'OR IMPÉRIAL</strong><span>EDICIÓN
+            LIMITADA <b>S/ 890.00</b></span></div>
+      </div>
+    </section>
+
+    <section class="benefits-bar">
+      <div class="benefit"><img src="/assets/icons/Verificado.png" alt="" />
+        <div><strong>100% Fragancias originales</strong><small>Lo mejor seleccionado de casas oficiales.</small></div>
+      </div>
+      <div class="benefit"><img src="/assets/icons/Carrito.png" alt="" />
+        <div><strong>Envío exclusivo nacional</strong><small>Entrega segura a todo el Perú.</small></div>
+      </div>
+      <div class="benefit"><img src="/assets/icons/Regalo.png" alt="" />
+        <div><strong>Muestras de cortesía</strong><small>Prueba antes de elegir tu próximo perfume.</small></div>
+      </div>
+      <div class="benefit"><img src="/assets/icons/Asesoria.png" alt="" />
+        <div><strong>Asesoría olfativa</strong><small>Te ayudamos a encontrar tu firma.</small></div>
+      </div>
+    </section>
+
+    <section id="familias" class="families section-container">
+      <div class="section-heading compact-heading">
+        <div><span class="eyebrow">Artesanía de notas</span>
+          <h2>Familias Olfativas Principales</h2>
+        </div>
+        <p>Navega por las emociones evocadas por cada familia y encuentra los acordes que hablan de tu personalidad.</p>
+      </div>
+      <div class="family-grid">
+        @for (family of familyCards; track family.name; let i = $index) {
+          <article class="family-card">
+            <img [src]="familyImage(i)" [alt]="family.name" />
+            <span>{{ family.name }}</span>
+            <small>{{ family.description }}</small>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section id="destacados" class="featured-section">
+      <div class="section-container">
+        <div class="section-heading centered-heading"><span class="eyebrow">Selección curada</span>
+          <h2>Perfumes Destacados</h2>
+          <p>Algunas de nuestras creaciones favoritas para acompañarte en cada ocasión.</p>
+        </div>
+        @if (isLoading()) {
+          <div class="loading-state">Cargando la selección de Laure...</div>
+        }
+        @if (!isLoading() && featuredProducts.length > 0) {
+          <div class="product-grid">
+            @for (product of featuredProducts; track product.idProducto; let i = $index) {
+              <app-product-card [product]="product" [index]="i" />
+            }
+          </div>
+        }
+        @if (!isLoading() && featuredProducts.length === 0) {
+          <div class="empty-state">Aún no hay perfumes disponibles en el catálogo.</div>
+        }
+        <a class="all-products" routerLink="/catalogo">Ver todos los perfumes de Laure <span>↗</span></a>
+      </div>
+    </section>
+
+    <section id="nosotros" class="author-section">
+      <div class="section-container author-content">
+        <div class="author-copy"><span class="eyebrow">El exclusivo Atelier Laure</span>
+          <h2>La Colección de Autor:<br /><em>Ediciones Numeradas a Mano</em></h2>
+          <p>Cada frasco es elaborado con cera, maderas y notas nobles. Una experiencia sensorial creada para permanecer
+            en la piel y en la memoria.</p>
+          <div class="author-stats"><span><b>100%</b> ingredientes puros</span><span><b>12</b> piezas por
+              edición</span><span><b>2026</b> nueva colección</span></div><a class="button button-gold"
+            href="#contacto">Descubrir colección privada</a>
+        </div><img src="/assets/images/ColeccionDeAutor.png" alt="Atelier de perfumería Laure" />
+      </div>
+    </section>
+
+  </main>
+  <app-footer />
+</div>

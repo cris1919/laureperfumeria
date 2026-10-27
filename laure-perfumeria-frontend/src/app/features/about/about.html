@@ -1,0 +1,40 @@
+<div class="about-page">
+  <app-header />
+
+  <main>
+    <section class="about-hero section-container">
+      <div class="about-hero-copy">
+        <span class="eyebrow">Manifiesto &amp; orígenes</span>
+        <h1>El Legado de la Alta<br />Perfumería en el Pacífico<br />Sur</h1>
+        <p>Nacida entre el legado de los artesanos de Lima y la memoria milenaria de los campos florales de Grasse, Laure Perfumería consagra el alma del extracto puro. Entendemos el aroma como una forma de memoria, sino como un arquitecto que habita la piel.</p>
+        <p class="muted-copy">Una íntima tradición secular de los maestros perfumistas franceses cobra vida en las manos de nuestros botánicos de la cordillera y la costa peruana.</p>
+        <div class="heritage-stats"><span><strong>1924</strong> nuestra herencia</span><span><strong>40%</strong> concentración pura</span><span><strong>Lima &amp; Grasse</strong> doble destilación</span></div>
+      </div>
+      <div class="about-hero-image"><img src="/assets/images/sobreNosotros1.png" alt="Atelier de creación Laure en San Isidro, Lima" /></div>
+    </section>
+
+    <section class="pillars-section">
+      <div class="section-container">
+        <div class="center-heading"><span class="eyebrow">Devoción invisible</span><h2>Los Cuatro Pilares de Nuestra<br />Filosofía</h2><p>Cada creación de Laure Perfumería se formula desde la industria comercial mediante protocolos de excelencia, memoria y oficio.</p></div>
+        <div class="pillars-grid">
+          @for (pillar of pillars; track pillar.number) {
+            <article class="pillar-card"><img [src]="pillar.icon" alt="" /><span>{{ pillar.number }} / {{ pillar.title }}</span><h3>{{ pillar.title }}</h3><p>{{ pillar.text }}</p><small>LAURE PERFUMERÍA</small></article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="experience section-container">
+      <div class="experience-images"><img class="experience-main" src="/assets/images/sobreNosotros2.png" alt="Boutique Laure en San Isidro" /><div class="experience-small"><img src="/assets/images/sobreNosotros3.png" alt="Consulta olfativa personalizada" /><div><span class="eyebrow">Atelier &amp; visión</span><strong>Av. Conquistadores</strong><small>San Isidro, Lima - Perú</small></div></div></div>
+      <div class="experience-copy"><span class="eyebrow">El refugio sensorial</span><h2>Una Experiencia Inmersiva en<br />San Isidro</h2><p>Lejos de las prisas del retail tradicional, nuestro salón privado ofrece un refugio acústico y sensorial diseñado para el descubrimiento pausado de las familias olfativas.</p><div class="experience-item"><img src="/assets/icons/Ubicacion.png" alt="" /><span><strong>Cita Olfativa a Ciegas</strong><small>Guiada por nuestros evaluadores para despertar el olfato de condiciones mínimas y descubrir afinidades moleculares puras.</small></span></div><div class="experience-item"><img src="/assets/icons/Pincel.png" alt="" /><span><strong>Creación Bespoke &amp; Firma Personal</strong><small>Sesiones exclusivas donde un perfumista formula un extrait personalizado, registrado de por vida en nuestros archivos.</small></span></div><div class="opening"><span>HORARIO DE SALÓN PRIVADO<br /><strong>Lun - Sáb: 11:00 am - 8:00 pm</strong></span><a href="#contacto">Reservar cita sensorial privada ↗</a></div></div>
+    </section>
+
+    <section class="masters-section">
+      <div class="section-container"><div class="section-heading"><div><span class="eyebrow">Autoría y sabiduría</span><h2>Nuestros Maestros Perfumistas</h2></div><p>Los hombres y mujeres detrás de la línea Laure Privé. Artistas que conciben cada fórmula como una partitura armónica única.</p></div><div class="masters-grid">@for (master of masters; track master.name) {<article class="master-card"><img [src]="master.image" [alt]="master.name" /><div><span>{{ master.place }}</span><h3>{{ master.name }}</h3><small>{{ master.text }}</small></div></article>}</div></div>
+    </section>
+
+    <section class="commitment section-container"><span class="eyebrow">Garantía Laure Privé</span><h2>El Compromiso de la Excelencia</h2><div class="commitment-grid"><div><img src="/assets/icons/Verificado.png" alt="" /><strong>100% Extractos Auténticos</strong><small>Certificados de origen firmados y holograma de autenticidad en cada cofre. Cero adulteración sintética en nuestras notas primarias.</small></div><div><img src="/assets/icons/Carrito.png" alt="" /><strong>Envío Asegurado a Todo el Perú</strong><small>Transporte con control de temperatura en estuches rígidos forrados en seda y sellados con cera protectora para resguardar la molécula.</small></div><div><img src="/assets/icons/Regalo.png" alt="" /><strong>2 Viales de Cortesía</strong><small>Cada pedido incluye 2 muestras de 2ml para prueba en piel previa a muestra del frasco principal, permitiendo cambio sin compromiso.</small></div></div></section>
+  </main>
+
+  <app-footer />
+</div>

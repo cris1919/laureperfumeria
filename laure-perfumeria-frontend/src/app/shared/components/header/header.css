@@ -1,0 +1,27 @@
+:host { display: block; }
+.site-header { height: 76px; padding: 0 max(24px, calc((100vw - 1180px) / 2)); display: flex; align-items: center; gap: 42px; background: #fbfaf7; border-bottom: 1px solid #e5e0d6; }
+.brand { display: flex; align-items: center; gap: 10px; color: #22231f; text-decoration: none; min-width: 220px; }
+.brand-logo { display: block; width: 34px; height: 34px; object-fit: contain; }
+.brand-name { font: 600 13px/1 Georgia, serif; letter-spacing: .08em; }
+.brand-name strong { font-weight: 400; }
+.brand-name small { display: block; margin-top: 5px; font: 7px/1 Arial, sans-serif; letter-spacing: .17em; color: #8c8a81; }
+.main-nav { display: flex; gap: 28px; flex: 1; justify-content: center; }
+.main-nav a, .account-link { color: #716d63; text-decoration: none; text-transform: uppercase; font-size: 10px; letter-spacing: .1em; white-space: nowrap; }
+.main-nav a.active { color: #aa8130; border-bottom: 1px solid #aa8130; padding-bottom: 5px; }
+.account-link { background: #2d2f2a; color: #fff; padding: 10px 14px; font-size: 9px; }
+.profile-link { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border-radius: 50%; }.profile-link svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.profile-menu-wrapper { position: relative; }.profile-dropdown { position: absolute; z-index: 20; top: calc(100% + 10px); right: 0; width: 185px; padding: 7px; background: #fff; border: 1px solid #e5ded2; box-shadow: 0 10px 24px #4b40251c; }.profile-dropdown::before { position: absolute; top: -5px; right: 13px; width: 8px; height: 8px; content: ''; background: #fff; border-top: 1px solid #e5ded2; border-left: 1px solid #e5ded2; transform: rotate(45deg); }.profile-dropdown a, .profile-dropdown button { display: block; width: 100%; padding: 11px 10px; border: 0; background: transparent; color: #59554d; text-align: left; text-decoration: none; text-transform: uppercase; font: 600 9px Arial, sans-serif; letter-spacing: .05em; }.profile-dropdown a:hover, .profile-dropdown button:hover { color: #a27829; background: #f7f3eb; }.profile-dropdown button { border-top: 1px solid #eee9e1; color: #9b4b43; cursor: pointer; }
+@media (max-width: 800px) {
+  .site-header { gap: 14px; padding-inline: 18px; }
+  .main-nav { gap: 16px; justify-content: flex-start; min-width: 0; }
+  .brand { min-width: auto; }
+  .brand-name { display: none; }
+  .main-nav a, .account-link { font-size: 10px; }
+}
+@media (max-width: 520px) {
+  .site-header { padding: 0 15px; gap: 11px; }
+  .main-nav { gap: 13px; }
+  .main-nav a:nth-child(2) { display: none; }
+  .main-nav a, .account-link { font-size: 9px; letter-spacing: .08em; }
+  .account-link { margin-left: auto; padding: 9px 8px; }
+}

@@ -1,0 +1,37 @@
+<div class="admin-shell">
+  <app-admin-sidebar [activeSection]="activeSection()" (sectionSelected)="selectSection($event)"></app-admin-sidebar>
+
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div><span class="eyebrow">Panel de control · {{ activeSection() }}</span><h1>Bienvenido, {{ user()?.nombres || 'Administrador' }}</h1><p>Gestiona la operación de Laure Atelier con una vista clara y actualizada.</p></div><div class="top-actions"><button type="button" (click)="downloadReport()">⇩ Descargar reporte</button></div>
+    </header>
+
+    @if (loading()) {
+      <section class="admin-state">Cargando información del atelier...</section>
+    } @else {
+      @if (error()) { <p class="admin-message">{{ error() }}</p> }
+      <section class="metrics-grid">
+        <article class="metric-card"><span class="metric-icon gold">$</span><small>Ventas acumuladas</small><strong>{{ financial().ingresos | currency:'PEN':'symbol':'1.2-2' }}</strong><em>Reporte financiero del backend</em></article>
+        <article class="metric-card"><span class="metric-icon blue">⌁</span><small>Pedidos registrados</small><strong>{{ orders().length }}</strong><em>Pedidos en el sistema</em></article>
+        <article class="metric-card"><span class="metric-icon red">!</span><small>Stock por revisar</small><strong>{{ lowStock().length }}</strong><em>Reporte de stock bajo</em></article>
+        <article class="metric-card"><span class="metric-icon violet">♢</span><small>Clientes registrados</small><strong>{{ clients().length }}</strong><em>Clientes activos del atelier</em></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel orders-panel"><div class="panel-heading"><div><span class="eyebrow">Seguimiento operativo</span><h2>Pedidos recientes</h2></div><button type="button" (click)="selectSection('Pedidos')">Ver todos →</button></div>
+          @if (recentOrders().length) {
+            <div class="orders-table"><div class="table-head"><span>Pedido</span><span>Cliente</span><span>Fecha</span><span>Total</span><span>Estado</span></div>
+              @for (order of recentOrders(); track order.idPedido) { <div class="table-row"><strong>{{ orderLabel(order) }}</strong><span>Cliente #{{ order.idCliente }}</span><span>{{ order.fechaPedido | date:'dd MMM yyyy' }}</span><b>{{ order.total | currency:'PEN':'symbol':'1.2-2' }}</b><em [class]="'status ' + order.estadoPedido.toLowerCase()">{{ statusLabel(order.estadoPedido) }}</em></div> }
+            </div>
+          } @else { <div class="empty-panel">Todavía no hay pedidos registrados.</div> }
+        </article>
+        <article class="panel quick-panel"><div class="panel-heading"><div><span class="eyebrow">Resumen financiero</span><h2>Rendimiento</h2></div></div><div class="performance"><div><strong>{{ averageOrder() | currency:'PEN':'symbol':'1.2-2' }}</strong><span>Ticket promedio</span></div><div><strong>{{ financial().margenBruto | currency:'PEN':'symbol':'1.2-2' }}</strong><span>Margen bruto</span></div><div><strong>{{ lowStock().length ? 'Revisar' : 'Correcto' }}</strong><span>Estado de inventario</span></div></div><div class="status-summary"><span>Estados de pedidos</span>@for (status of orderStatuses(); track status.estado) { <b>{{ statusLabel(status.estado) }}: {{ status.cantidad }}</b> }</div><div class="quick-note">Los indicadores financieros y operativos se actualizan desde los reportes del backend.</div></article>
+      </section>
+
+      <section class="panel inventory-panel"><div class="panel-heading"><div><span class="eyebrow">Inventario</span><h2>Productos que requieren atención</h2></div><button type="button" (click)="selectSection('Inventario')">Gestionar inventario →</button></div>
+        @if (lowStock().length) { <div class="inventory-grid">@for (product of lowStock(); track product.idProducto) { <article class="inventory-item"><div class="inventory-top"><span>{{ product.marca || 'Laure Privé' }}</span><b [class.critical]="product.stock <= 2">{{ product.stock }} unidades</b></div><h3>{{ product.nombreProducto }}</h3><div class="stock-bar"><i [style.width.%]="Math.min(product.stock * 20, 100)"></i></div><small>{{ product.stock <= 2 ? 'Stock crítico' : 'Stock reducido' }} · {{ product.estado }}</small></article> }</div> } @else { <div class="empty-panel">Todo el inventario se encuentra en niveles saludables.</div> }
+      </section>
+      <section class="panel top-products-panel"><div class="panel-heading"><div><span class="eyebrow">Comportamiento de ventas</span><h2>Productos más vendidos</h2></div></div>@if (topProducts().length) { <div class="top-products">@for (product of topProducts(); track product.idProducto; let i = $index) { <div><span class="rank">0{{ i + 1 }}</span><strong>{{ product.nombreProducto }}</strong><small>{{ product.cantidadVendida }} unidades</small><b>{{ product.ingresos | currency:'PEN':'symbol':'1.2-2' }}</b></div> }</div> } @else { <div class="empty-panel">Aún no hay ventas suficientes para generar este ranking.</div> }</section>
+    }
+  </main>
+</div>

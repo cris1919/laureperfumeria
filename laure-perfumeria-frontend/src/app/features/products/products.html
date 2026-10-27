@@ -1,0 +1,83 @@
+<div class="catalog-page">
+  <app-header />
+
+  <main>
+    <section class="catalog-intro section-container">
+      <div class="breadcrumb"><a routerLink="/">Inicio</a><span>/</span><strong>Catálogo de Perfumes</strong></div>
+      <div class="catalog-title-row">
+        <div><span class="eyebrow">Laure / selección de autor</span>
+          <h1>Catálogo de Alta Perfumería</h1>
+          <p>Explora nuestra selección de élite: concentraciones puras y formulaciones artesanales inspiradas
+            directamente de los talleres más prestigiosos de Grasse, Milán y París.</p>
+        </div>
+        <span class="collection-note">Colección exclusiva 2024</span>
+      </div>
+    </section>
+
+    <section class="catalog-content section-container">
+      <div class="catalog-toolbar">
+        <button class="filter-toggle" type="button" (click)="filtersOpen.set(!filtersOpen())">☰
+          <span>Filtros</span></button>
+        <div class="search-box"><span>⌕</span><input [value]="searchTerm"
+            (input)="searchTerm = $any($event.target).value" (keyup.enter)="search()"
+            placeholder="Buscar por fragancia, notas olfativas o casa de perfumería..."
+            aria-label="Buscar perfumes" /><button type="button" (click)="search()">Buscar</button></div>
+        <span class="result-count">Mostrando {{ resultLabel }}</span>
+        <label class="sort-control">ORDENAR POR <select [value]="sortOrder" (change)="changeSort($event)">
+            <option value="popular">Más populares</option>
+            <option value="price-low">Precio menor</option>
+            <option value="price-high">Precio mayor</option>
+            <option value="name">Nombre A-Z</option>
+          </select></label>
+      </div>
+
+      <div class="catalog-layout">
+        <aside class="filters-panel" [class.is-open]="filtersOpen()">
+          <div class="filter-header"><strong>☷ Filtros</strong><button type="button"
+              (click)="selectCategory(null)">Limpiar filtros</button></div>
+          <div class="filter-block"><span class="filter-title">Familia olfativa</span>
+            @for (category of categories(); track category.idCategoria) {
+            <label class="check-row"><input type="radio" name="category"
+                [checked]="selectedCategoryId === category.idCategoria"
+                (change)="selectCategory(category.idCategoria)" /><span>{{ category.nombre }}</span><small>({{
+                category.idCategoria }})</small></label>
+            }
+          </div>
+        </aside>
+
+        <section class="products-area">
+          @if (isLoading()) {
+          <div class="catalog-state">Cargando fragancias...</div>
+          } @else if (hasError()) {
+          <div class="catalog-state">No se pudo cargar el catálogo. Revisa que el backend esté activo.</div>
+          } @else if (visibleProducts.length === 0) {
+          <div class="catalog-state">No encontramos fragancias con esos criterios.</div>
+          } @else {
+          <div class="products-grid">
+            @for (product of visibleProducts; track product.idProducto; let i = $index) {
+            <app-product-card [product]="product" [index]="i" />
+            }
+          </div>
+          @if (pageCount > 1) {
+          <nav class="pagination" aria-label="Paginación"><button type="button" [disabled]="currentPage === 1"
+              (click)="goToPage(currentPage - 1)">‹</button>@for (page of [].constructor(pageCount); track $index; let i
+            = $index) {<button type="button" [class.current]="currentPage === i + 1" (click)="goToPage(i + 1)">{{ i + 1
+              }}</button>}<button type="button" [disabled]="currentPage === pageCount"
+              (click)="goToPage(currentPage + 1)">›</button></nav>
+          }
+          }
+        </section>
+      </div>
+    </section>
+
+    <section class="consultation-banner section-container">
+      <div><span class="eyebrow">Servicio Atelier Bespoke</span>
+        <h2>¿Busca su firma olfativa personalizada?</h2>
+        <p>Nuestros maestros perfumistas ofrecen consultas sensoriales privadas en nuestra boutique de Miraflores para
+          crear una armonía única que resuene con su personalidad.</p>
+      </div><a href="#contacto">Agendar consulta privada</a>
+    </section>
+  </main>
+
+  <app-footer />
+</div>

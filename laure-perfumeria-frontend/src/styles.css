@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f7f5f0; font-family: 'DM Sans', Arial, sans-serif; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+.download:hover { background: #3c3e38 !important; }
+.tracking:hover, .explore:hover { background: #f5efe2 !important; }
+.continue:hover { background: #3c3e38 !important; }
+.checkout-error { margin: 0 0 10px; color: #a5483e; font: 10px Arial, sans-serif; }
+.continue:disabled { cursor: wait; opacity: .7; }

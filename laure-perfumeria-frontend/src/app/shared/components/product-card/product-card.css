@@ -1,0 +1,20 @@
+:host { display: block; min-width: 0; }
+.catalog-card { min-width: 0; height: 100%; background: #fff; border: 1px solid #e8e2d8; box-shadow: 0 4px 14px #6e655318; }
+.catalog-image { position: relative; display: grid; place-items: center; min-height: 190px; margin: 7px; background: #f1efeb; }
+.catalog-image img { display: block; width: 100%; height: 174px; object-fit: contain; mix-blend-mode: multiply; }
+.availability { position: absolute; z-index: 1; top: 9px; left: 8px; padding: 4px 6px; background: #e6e4df; color: #8d887e; font: 7px Arial, sans-serif; letter-spacing: .06em; }
+.availability.low-stock { background: #eee0b6; color: #947327; }
+.catalog-card-info { padding: 7px 12px 12px; }
+.catalog-card-info > small { color: #a17c31; text-transform: uppercase; font: 7px Arial, sans-serif; letter-spacing: .11em; }
+.catalog-card h2 { margin: 8px 0 5px; color: #34332d; font: 17px Georgia, serif; }
+.catalog-card p { height: 29px; margin: 0; overflow: hidden; color: #918c83; font: 9px/1.45 Georgia, serif; }
+.price-line { display: flex; align-items: end; justify-content: space-between; gap: 5px; margin-top: 13px; padding-top: 9px; border-top: 1px solid #eeeae3; }
+.price-line strong { color: #2c2d28; font: 600 18px Georgia, serif; }
+.price-line span { padding: 5px; background: #f7e9d8; color: #a56d36; text-align: right; font: 7px Arial, sans-serif; }
+.price-line span.stock-good { background: #e1f3e8; color: #3e8d65; }
+.card-actions { display: flex; gap: 5px; margin-top: 11px; }
+.card-actions button, .card-actions a { flex: 1; border: 1px solid #cfc8bc; background: #fff; padding: 7px 3px; color: #4e4b43; text-align: center; text-decoration: none; font: 600 7px Arial, sans-serif; letter-spacing: .05em; }
+.card-actions button:last-child { flex: 0 0 25px; color: #fff; background: #2b2d29; border-color: #2b2d29; display: grid; place-items: center; }
+.card-actions button:last-child img { width: 16px; height: 16px; object-fit: contain; display: block; }
+@media (max-width: 650px) { .catalog-image { min-height: 155px; }.catalog-image img { height: 140px; }.catalog-card-info { padding-inline: 9px; }.catalog-card h2 { font-size: 15px; }.price-line { display: block; }.price-line span { display: inline-block; margin-top: 6px; } }
+@media (max-width: 390px) { .catalog-image { min-height: 135px; }.catalog-image img { height: 122px; }.catalog-card h2 { font-size: 14px; }.catalog-card p { font-size: 8px; }.price-line strong { font-size: 16px; }.card-actions button, .card-actions a { font-size: 6px; } }

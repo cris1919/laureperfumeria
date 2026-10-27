@@ -1,0 +1,9 @@
+<aside class="admin-sidebar">
+  <a class="admin-brand" routerLink="/admin"><img src="/assets/images/logo.png" alt="Laure Atelier" /><span>LAURE ATELIER<small>ADMINISTRACIÓN BOUTIQUE</small></span></a>
+  <div class="sidebar-label">Gestión principal</div>
+  <nav class="admin-nav" aria-label="Administración">
+    @for (item of menuItems; track item) { <button type="button" [class.active]="activeSection === item" (click)="selectSection(item)"><span class="nav-icon">{{ item === 'Dashboard' ? '▦' : item === 'Pedidos' ? '▤' : item === 'Catálogo' ? '□' : '♙' }}</span>{{ item }}</button> }
+  </nav>
+  <button class="sidebar-logout" type="button" (click)="logout()">↪ Cerrar sesión</button>
+  <div class="sidebar-user"><div class="avatar">{{ auth.currentUser()?.nombres?.charAt(0) || 'A' }}</div><div><strong>{{ auth.currentUser()?.nombres || 'Administrador' }}</strong><small>Administrador general</small></div></div>
+</aside>

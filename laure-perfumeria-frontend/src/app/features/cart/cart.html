@@ -1,0 +1,17 @@
+<div class="cart-page">
+  <app-header />
+  <main class="cart-main section-container">
+    <h1>Su Selección Olfativa</h1>
+    <p class="cart-subtitle">Bolsa de Compra ({{ cart.totalCount() }} frascos seleccionados)</p>
+
+    @if (cart.items().length === 0) {
+      <section class="empty-cart"><h2>Su bolsa está vacía</h2><p>Descubra una composición especial para su colección.</p><a routerLink="/catalogo">SEGUIR EXPLORANDO EL CATÁLOGO</a></section>
+    } @else {
+      <section class="cart-layout">
+        <div class="cart-items">@for (item of cart.items(); track item.product.idProducto) {<article class="cart-item"><img [src]="image(item)" [alt]="item.product.nombre" /><div class="item-info"><small>{{ item.product.marca || 'LAURE PRIVÉ' }}</small><h2>{{ item.product.nombre }}</h2><p>{{ item.product.descripcion || 'Extracto de parfum · Selección Laure Privé' }}</p><div class="quantity"><button type="button" (click)="decrease(item)">−</button><span>{{ item.quantity }}</span><button type="button" [disabled]="item.quantity >= item.product.stock" (click)="increase(item)">+</button></div></div><strong>{{ price(item.product.precioVenta * item.quantity) }}</strong><button class="remove" type="button" (click)="cart.remove(item.product.idProducto)" aria-label="Quitar producto">×</button></article>}</div>
+        <aside class="order-summary"><h2>Resumen del Pedido</h2><div><span>Subtotal ({{ cart.totalCount() }} frascos)</span><strong>{{ price(cart.total()) }}</strong></div><div><span>Envío Asegurado Climatizado</span><strong class="gold">Gratis</strong></div><div><span>Empaque Alta Perfumería</span><strong>Sin Costo</strong></div><div><span>Muestras de Descubrimiento</span><strong>Incluidas</strong></div><hr /><h3>Total Estimado <strong>{{ price(cart.total()) }}</strong></h3>@if (checkoutError()) { <p class="checkout-error">{{ checkoutError() }}</p> }<button type="button" class="continue" [disabled]="isCheckingOut()" (click)="realizePurchase()">{{ isCheckingOut() ? 'REGISTRANDO COMPRA...' : 'REALIZAR COMPRA →' }}</button><a routerLink="/catalogo" class="explore">SEGUIR EXPLORANDO EL CATÁLOGO</a></aside>
+      </section>
+    }
+  </main>
+  <app-footer />
+</div>
