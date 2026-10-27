@@ -1,0 +1,114 @@
+{
+  "info": {
+    "name": "Laure Perfumeria API",
+    "description": "Colección para probar la API. Ejecutar en orden. Las variables se completan automáticamente con los IDs de las respuestas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key":"baseUrl","value":"http://localhost:8080/api"},
+    {"key":"adminEmail","value":"admin.prueba@codex.local"},
+    {"key":"adminPassword","value":"Admin123!"},
+    {"key":"clientEmail","value":"cliente.prueba@codex.local"},
+    {"key":"clientPassword","value":"Cliente123!"},
+    {"key":"adminToken","value":""}, {"key":"clientToken","value":""},
+    {"key":"clienteId","value":"1"}, {"key":"usuarioId","value":"1"},
+    {"key":"categoriaId","value":"1"}, {"key":"productoId","value":"1"},
+    {"key":"pedidoId","value":"1"}, {"key":"detallePedidoId","value":"1"},
+    {"key":"pagoId","value":"1"}, {"key":"ventaId","value":"1"}
+  ],
+  "item": [
+    {"name":"0. Configuración inicial","item":[
+      {"name":"Registrar administrador inicial (solo si no existe ADMIN)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"nombres\": \"Administrador\",\n  \"apellidos\": \"Inicial\",\n  \"correo\": \"admin@laure.local\",\n  \"password\": \"Admin123!\"\n}"},"url":{"raw":"{{baseUrl}}/usuarios/registro-inicial","host":["{{baseUrl}}"],"path":["usuarios","registro-inicial"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Solo crea el administrador inicial', () => pm.expect([201, 400, 409, 500]).to.include(pm.response.code));","if (pm.response.code === 201) pm.collectionVariables.set('usuarioId', pm.response.json().idUsuario);"]}}]},
+      {"name":"Verificar bloqueo de segundo administrador","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"nombres\": \"Segundo\",\n  \"apellidos\": \"Administrador\",\n  \"correo\": \"segundo@laure.local\",\n  \"password\": \"Admin123!\"\n}"},"url":{"raw":"{{baseUrl}}/usuarios/registro-inicial","host":["{{baseUrl}}"],"path":["usuarios","registro-inicial"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Segundo administrador bloqueado', () => pm.response.to.have.status(409));"]}}]}
+    ]},
+    {"name":"1. Autenticación y datos base","item":[
+      {"name":"Login administrador","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"correo\": \"admin.prueba@codex.local\",\n  \"password\": \"Admin123!\"\n}"},"url":{"raw":"{{baseUrl}}/auth/login","host":["{{baseUrl}}"],"path":["auth","login"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Login admin correcto', () => pm.response.to.have.status(200));","pm.collectionVariables.set('adminToken', pm.response.json().token);","pm.collectionVariables.set('usuarioId', pm.response.json().idUsuario);"]}}]},
+      {"name":"Login cliente","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"correo\": \"cliente.prueba@codex.local\",\n  \"password\": \"Cliente123!\"\n}"},"url":{"raw":"{{baseUrl}}/auth/login","host":["{{baseUrl}}"],"path":["auth","login"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Login cliente correcto', () => pm.response.to.have.status(200));","pm.collectionVariables.set('clientToken', pm.response.json().token);","pm.collectionVariables.set('clienteId', pm.response.json().idUsuario);"]}}]},
+      {"name":"Registrar cliente","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"nombres\": \"Cliente\",\n  \"apellidos\": \"Postman\",\n  \"correo\": \"cliente.prueba@codex.local\",\n  \"password\": \"Cliente123!\",\n  \"telefono\": \"999999999\",\n  \"direccion\": \"Direccion de prueba\"\n}"},"url":{"raw":"{{baseUrl}}/clientes","host":["{{baseUrl}}"],"path":["clientes"]}}}
+    ]},
+    {"name":"2. Categorias y productos (ADMIN)","auth":{"type":"bearer","bearer":[{"key":"token","value":"{{adminToken}}","type":"string"}]},"item":[
+      {"name":"Registrar categoria","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"nombre\": \"Perfumes Postman\",\n  \"descripcion\": \"Categoria de prueba\"\n}"},"url":{"raw":"{{baseUrl}}/categorias","host":["{{baseUrl}}"],"path":["categorias"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Categoria creada', () => pm.response.to.have.status(201));","pm.collectionVariables.set('categoriaId', pm.response.json().idCategoria);"]}}]},
+      {"name":"Listar categorias","request":{"method":"GET","url":{"raw":"{{baseUrl}}/categorias","host":["{{baseUrl}}"],"path":["categorias"]}}},
+      {"name":"Registrar producto","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"idCategoria\": 1,\n  \"nombre\": \"Perfume Postman\",\n  \"descripcion\": \"Producto de prueba\",\n  \"marca\": \"Laure\",\n  \"precioVenta\": 100,\n  \"costoUnitario\": 40,\n  \"stock\": 10,\n  \"imagenes\": [\"https://example.com/perfume-1.jpg\",\"https://example.com/perfume-2.jpg\",\"https://example.com/perfume-3.jpg\",\"https://example.com/perfume-4.jpg\"]\n}"},"url":{"raw":"{{baseUrl}}/productos","host":["{{baseUrl}}"],"path":["productos"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Producto creado', () => pm.response.to.have.status(201));","pm.collectionVariables.set('productoId', pm.response.json().idProducto);"]}}]},
+      {"name":"Actualizar producto","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"idCategoria\": 1,\n  \"nombre\": \"Perfume Postman actualizado\",\n  \"descripcion\": \"Actualizado\",\n  \"marca\": \"Laure\",\n  \"precioVenta\": 110,\n  \"costoUnitario\": 45,\n  \"stock\": 10,\n  \"imagenes\": [\"https://example.com/perfume-1.jpg\",\"https://example.com/perfume-2.jpg\",\"https://example.com/perfume-3.jpg\",\"https://example.com/perfume-4.jpg\"]\n}"},"url":{"raw":"{{baseUrl}}/productos/{{productoId}}","host":["{{baseUrl}}"],"path":["productos","{{productoId}}"]}}},
+      {"name":"Actualizar precio y costo","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"precioVenta\":115,\"costoUnitario\":46}"},"url":{"raw":"{{baseUrl}}/productos/{{productoId}}/precio-costo","host":["{{baseUrl}}"],"path":["productos","{{productoId}}","precio-costo"]}}},
+      {"name":"Productos con bajo stock","request":{"method":"GET","url":{"raw":"{{baseUrl}}/productos/bajo-stock?limite=5","host":["{{baseUrl}}"],"path":["productos","bajo-stock"],"query":[{"key":"limite","value":"5"}]}}}
+    ]},
+    {"name":"3. Consultas publicas y cliente","item":[
+      {"name":"Listar productos","request":{"method":"GET","url":{"raw":"{{baseUrl}}/productos","host":["{{baseUrl}}"],"path":["productos"]}}},
+      {"name":"Buscar producto por nombre","request":{"method":"GET","url":{"raw":"{{baseUrl}}/productos/buscar?nombre=Perfume","host":["{{baseUrl}}"],"path":["productos","buscar"],"query":[{"key":"nombre","value":"Perfume"}]}}},
+      {"name":"Filtrar por categoria","request":{"method":"GET","url":{"raw":"{{baseUrl}}/productos/categoria/{{categoriaId}}","host":["{{baseUrl}}"],"path":["productos","categoria","{{categoriaId}}"]}}},
+      {"name":"Consultar perfil cliente","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"}],"url":{"raw":"{{baseUrl}}/clientes/{{clienteId}}","host":["{{baseUrl}}"],"path":["clientes","{{clienteId}}"]}}},
+      {"name":"Actualizar datos cliente","request":{"method":"PUT","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"nombres\":\"Cliente actualizado\",\"apellidos\":\"Postman\",\"correo\":\"cliente.prueba@codex.local\",\"telefono\":\"988888888\",\"direccion\":\"Nueva direccion\"}"},"url":{"raw":"{{baseUrl}}/clientes/{{clienteId}}","host":["{{baseUrl}}"],"path":["clientes","{{clienteId}}"]}}}
+    ]},
+    {"name":"4. Pedidos, pagos e inventario","item":[
+      {"name":"Registrar pedido","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"idCliente\": 1,\n  \"costoEnvio\": 10,\n  \"observaciones\": \"Pedido Postman\",\n  \"detalles\": [{\"idProducto\": 1, \"cantidad\": 1}]\n}"},"url":{"raw":"{{baseUrl}}/pedidos","host":["{{baseUrl}}"],"path":["pedidos"]}},"event":[{"listen":"test","script":{"exec":["pm.test('Pedido creado', () => pm.response.to.have.status(201));","pm.collectionVariables.set('pedidoId', pm.response.json().idPedido);"]}}]},
+      {"name":"Listar pedidos del cliente","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"}],"url":{"raw":"{{baseUrl}}/pedidos/cliente/{{clienteId}}","host":["{{baseUrl}}"],"path":["pedidos","cliente","{{clienteId}}"]}}},
+      {"name":"Consultar pedido","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"}],"url":{"raw":"{{baseUrl}}/pedidos/{{pedidoId}}","host":["{{baseUrl}}"],"path":["pedidos","{{pedidoId}}"]}}},
+      {"name":"Pago contra entrega","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{clientToken}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idPedido\":1,\"observaciones\":\"Pago al recibir\"}"},"url":{"raw":"{{baseUrl}}/pagos/contra-entrega","host":["{{baseUrl}}"],"path":["pagos","contra-entrega"]}}},
+      {"name":"Entrada de inventario","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{adminToken}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idProducto\":1,\"idUsuario\":1,\"cantidad\":5,\"motivo\":\"Reposicion Postman\",\"referencia\":\"POSTMAN\"}"},"url":{"raw":"{{baseUrl}}/movimientos-inventario/entrada","host":["{{baseUrl}}"],"path":["movimientos-inventario","entrada"]}}}
+    ]},
+    {"name":"5. Reportes y ventas (ADMIN)","auth":{"type":"bearer","bearer":[{"key":"token","value":"{{adminToken}}","type":"string"}]},"item":[
+      {"name":"Reporte mas vendidos","request":{"method":"GET","url":{"raw":"{{baseUrl}}/reportes/productos-mas-vendidos","host":["{{baseUrl}}"],"path":["reportes","productos-mas-vendidos"]}}},
+      {"name":"Reporte ventas por periodo","request":{"method":"GET","url":{"raw":"{{baseUrl}}/reportes/ventas?desde=2026-01-01&hasta=2026-12-31","host":["{{baseUrl}}"],"path":["reportes","ventas"],"query":[{"key":"desde","value":"2026-01-01"},{"key":"hasta","value":"2026-12-31"}]}}},
+      {"name":"Reporte stock","request":{"method":"GET","url":{"raw":"{{baseUrl}}/reportes/stock","host":["{{baseUrl}}"],"path":["reportes","stock"]}}},
+      {"name":"Descargar Excel de reportes","request":{"method":"GET","url":{"raw":"{{baseUrl}}/reportes/excel?desde=2026-01-01&hasta=2026-12-31","host":["{{baseUrl}}"],"path":["reportes","excel"],"query":[{"key":"desde","value":"2026-01-01"},{"key":"hasta","value":"2026-12-31"}]}}},
+      {"name":"Reporte menos vendidos","request":{"method":"GET","url":"{{baseUrl}}/reportes/productos-menos-vendidos"}},
+      {"name":"Reporte ingresos","request":{"method":"GET","url":"{{baseUrl}}/reportes/ingresos?desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Reporte costos","request":{"method":"GET","url":"{{baseUrl}}/reportes/costos?desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Reporte margen bruto","request":{"method":"GET","url":"{{baseUrl}}/reportes/margen-bruto?desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Reporte stock bajo","request":{"method":"GET","url":"{{baseUrl}}/reportes/stock-bajo?limite=5"}},
+      {"name":"Reporte pedidos por estado","request":{"method":"GET","url":"{{baseUrl}}/reportes/pedidos-por-estado"}}
+    ]},
+    {"name":"6. Endpoints administrativos restantes","auth":{"type":"bearer","bearer":[{"key":"token","value":"{{adminToken}}","type":"string"}]},"item":[
+      {"name":"Consultar categoria por ID","request":{"method":"GET","url":"{{baseUrl}}/categorias/{{categoriaId}}"}},
+      {"name":"Consultar producto por ID","request":{"method":"GET","url":"{{baseUrl}}/productos/{{productoId}}"}},
+      {"name":"Consultar productos disponibles","request":{"method":"GET","url":"{{baseUrl}}/productos/disponibles"}},
+      {"name":"Consultar perfumes destacados (maximo 4)","request":{"method":"GET","url":"{{baseUrl}}/productos/destacados"},"event":[{"listen":"test","script":{"exec":["pm.test('La respuesta contiene como maximo 4 destacados', () => pm.expect(pm.response.json().length).to.be.at.most(4));"]}}]},
+      {"name":"Actualizar categoria","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"nombre\":\"Categoria actualizada\",\"descripcion\":\"Actualizada\"}"},"url":"{{baseUrl}}/categorias/{{categoriaId}}"}},
+      {"name":"Activar o desactivar categoria","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"estado\":\"INACTIVO\"}"},"url":"{{baseUrl}}/categorias/{{categoriaId}}/estado"}},
+      {"name":"Activar o desactivar producto","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"estado\":\"INACTIVO\"}"},"url":"{{baseUrl}}/productos/{{productoId}}/estado"}},
+      {"name":"Listar clientes","request":{"method":"GET","url":"{{baseUrl}}/clientes"}},
+      {"name":"Activar o desactivar cliente","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"estado\":\"ACTIVO\"}"},"url":"{{baseUrl}}/clientes/{{clienteId}}/estado"}},
+      {"name":"Listar usuarios administrativos","request":{"method":"GET","url":"{{baseUrl}}/usuarios"}},
+      {"name":"Consultar perfil administrador","request":{"method":"GET","url":"{{baseUrl}}/usuarios/{{usuarioId}}"}},
+      {"name":"Actualizar administrador","request":{"method":"PUT","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"nombres\":\"Admin actualizado\",\"apellidos\":\"Sistema\",\"correo\":\"admin.prueba@codex.local\",\"rol\":\"ADMIN\"}"},"url":"{{baseUrl}}/usuarios/{{usuarioId}}"}},
+      {"name":"Cambiar password administrador","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"passwordActual\":\"Admin123!\",\"passwordNueva\":\"Admin123!\"}"},"url":"{{baseUrl}}/usuarios/{{usuarioId}}/password"}},
+      {"name":"Activar o desactivar usuario","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"estado\":\"ACTIVO\"}"},"url":"{{baseUrl}}/usuarios/{{usuarioId}}/estado"}},
+      {"name":"Listar todos los pedidos","request":{"method":"GET","url":"{{baseUrl}}/pedidos/admin"}},
+      {"name":"Filtrar pedidos","request":{"method":"GET","url":"{{baseUrl}}/pedidos/filtrar?estado=PENDIENTE&desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Consultar estado pedido","request":{"method":"GET","url":"{{baseUrl}}/pedidos/{{pedidoId}}/estado"}},
+      {"name":"Actualizar estado pedido","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"estado\":\"CONFIRMADO\"}"},"url":"{{baseUrl}}/pedidos/{{pedidoId}}/estado"}},
+      {"name":"Confirmar pago","request":{"method":"PATCH","url":"{{baseUrl}}/pagos/{{pagoId}}/confirmar"}},
+      {"name":"Rechazar pago","request":{"method":"PATCH","url":"{{baseUrl}}/pagos/{{pagoId}}/rechazar"}},
+      {"name":"Pagos pendientes","request":{"method":"GET","url":"{{baseUrl}}/pagos/pendientes"}},
+      {"name":"Registrar venta desde pedido","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idPedido\":1,\"idUsuario\":1}"},"url":"{{baseUrl}}/ventas"}},
+      {"name":"Listar ventas","request":{"method":"GET","url":"{{baseUrl}}/ventas"}},
+      {"name":"Consultar venta","request":{"method":"GET","url":"{{baseUrl}}/ventas/{{ventaId}}"}},
+      {"name":"Ventas por periodo","request":{"method":"GET","url":"{{baseUrl}}/ventas/periodo?desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Ventas por pedido","request":{"method":"GET","url":"{{baseUrl}}/ventas/pedido/{{pedidoId}}"}},
+      {"name":"Total de ventas","request":{"method":"GET","url":"{{baseUrl}}/ventas/total"}},
+      {"name":"Anular venta","request":{"method":"PATCH","url":"{{baseUrl}}/ventas/{{ventaId}}/anular"}},
+      {"name":"Descargar factura PDF","request":{"method":"GET","url":"{{baseUrl}}/facturas/venta/{{ventaId}}/pdf"}},
+      {"name":"Detalles de venta","request":{"method":"GET","url":"{{baseUrl}}/ventas/{{ventaId}}/detalles"}},
+      {"name":"Movimientos por producto","request":{"method":"GET","url":"{{baseUrl}}/movimientos-inventario/producto/{{productoId}}"}},
+      {"name":"Movimientos por fecha","request":{"method":"GET","url":"{{baseUrl}}/movimientos-inventario/fecha?desde=2026-01-01&hasta=2026-12-31"}},
+      {"name":"Movimientos por tipo","request":{"method":"GET","url":"{{baseUrl}}/movimientos-inventario/tipo/ENTRADA"}},
+      {"name":"Salida de inventario","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idProducto\":1,\"idUsuario\":1,\"cantidad\":1,\"motivo\":\"Salida Postman\",\"referencia\":\"POSTMAN\"}"},"url":"{{baseUrl}}/movimientos-inventario/salida"}},
+      {"name":"Ajuste positivo de inventario","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idProducto\":1,\"idUsuario\":1,\"cantidad\":1,\"motivo\":\"Ajuste Postman\",\"referencia\":\"POSTMAN\"}"},"url":"{{baseUrl}}/movimientos-inventario/ajuste-positivo"}},
+      {"name":"Ajuste negativo de inventario","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idProducto\":1,\"idUsuario\":1,\"cantidad\":1,\"motivo\":\"Ajuste Postman\",\"referencia\":\"POSTMAN\"}"},"url":"{{baseUrl}}/movimientos-inventario/ajuste-negativo"}}
+    ]},
+    {"name":"7. Endpoints del cliente y detalle de pedido","auth":{"type":"bearer","bearer":[{"key":"token","value":"{{clientToken}}","type":"string"}]},"item":[
+    {"name":"Cambiar password cliente","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"passwordActual\":\"Cliente123!\",\"passwordNueva\":\"Cliente123!\"}"},"url":"{{baseUrl}}/clientes/{{clienteId}}/password"}},
+      {"name":"Historial del cliente","request":{"method":"GET","url":"{{baseUrl}}/pedidos/cliente/{{clienteId}}/historial"}},
+      {"name":"Agregar detalle al pedido","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idProducto\":1,\"cantidad\":1}"},"url":"{{baseUrl}}/pedidos/{{pedidoId}}/detalles"}},
+      {"name":"Consultar detalles del pedido","request":{"method":"GET","url":"{{baseUrl}}/pedidos/{{pedidoId}}/detalles"}},
+      {"name":"Actualizar cantidad detalle","request":{"method":"PATCH","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"cantidad\":2}"},"url":"{{baseUrl}}/pedidos/{{pedidoId}}/detalles/{{detallePedidoId}}"}},
+      {"name":"Eliminar detalle del pedido","request":{"method":"DELETE","url":"{{baseUrl}}/pedidos/{{pedidoId}}/detalles/{{detallePedidoId}}"}},
+      {"name":"Pagos por pedido","request":{"method":"GET","url":"{{baseUrl}}/pagos/pedido/{{pedidoId}}"}},
+      {"name":"Consultar pago","request":{"method":"GET","url":"{{baseUrl}}/pagos/{{pagoId}}"}},
+      {"name":"Registrar pago manual","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"idPedido\":1,\"monto\":110,\"metodoPago\":\"TRANSFERENCIA\",\"referencia\":\"TEST-POSTMAN\",\"observaciones\":\"Pago de prueba\"}"},"url":"{{baseUrl}}/pagos"}},
+      {"name":"Cancelar pedido","request":{"method":"PATCH","url":"{{baseUrl}}/pedidos/{{pedidoId}}/cancelar"}}
+    ]}
+  ]
+}
