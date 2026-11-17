@@ -43,12 +43,19 @@ export class Home implements OnInit {
       return;
     }
 
+    this.loadFeaturedProducts();
+  }
+
+  loadFeaturedProducts(): void {
+    this.isLoading.set(true);
+    this.hasError.set(false);
     this.catalog.getFeaturedProducts().subscribe({
       next: (products) => {
         this.products.set(products ?? []);
         this.isLoading.set(false);
       },
       error: () => {
+        this.products.set([]);
         this.hasError.set(true);
         this.isLoading.set(false);
       },

@@ -61,16 +61,22 @@
           <p>Algunas de nuestras creaciones favoritas para acompañarte en cada ocasión.</p>
         </div>
         @if (isLoading()) {
-          <div class="loading-state">Cargando la selección de Laure...</div>
+          <div class="loading-state" aria-live="polite">Cargando la selección de Laure...</div>
         }
-        @if (!isLoading() && featuredProducts.length > 0) {
+        @if (!isLoading() && hasError()) {
+          <div class="empty-state" role="alert">
+            <p>No pudimos cargar los perfumes destacados. Revisa tu conexión e inténtalo de nuevo.</p>
+            <button class="button button-light" type="button" (click)="loadFeaturedProducts()">Reintentar</button>
+          </div>
+        }
+        @if (!isLoading() && !hasError() && featuredProducts.length > 0) {
           <div class="product-grid">
             @for (product of featuredProducts; track product.idProducto; let i = $index) {
               <app-product-card [product]="product" [index]="i" />
             }
           </div>
         }
-        @if (!isLoading() && featuredProducts.length === 0) {
+        @if (!isLoading() && !hasError() && featuredProducts.length === 0) {
           <div class="empty-state">Aún no hay perfumes disponibles en el catálogo.</div>
         }
         <a class="all-products" routerLink="/catalogo">Ver todos los perfumes de Laure <span>↗</span></a>

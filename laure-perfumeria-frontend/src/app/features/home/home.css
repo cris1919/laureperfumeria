@@ -595,6 +595,10 @@ h2 em {
   font: 13px Georgia, serif;
 }
 
+.empty-state p {
+  margin: 0 0 16px;
+}
+
 @media (max-width: 800px) {
   .site-header {
     gap: 14px;
